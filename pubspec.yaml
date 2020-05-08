@@ -1,0 +1,20 @@
+name: rainbow_color
+description: Color interpolation; Map a numerical domain to a smooth-transitioning color range.
+version: 0.0.1
+author: Mike Hoolehan
+homepage: https://github.com/ilikerobots/rainbow_color
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  rainbow_vis: ^1.0.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
