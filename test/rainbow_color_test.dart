@@ -19,7 +19,7 @@ main() {
 
     test('Ascending domain', () {
       var rb = Rainbow(
-          spectrum: [Color(0xFF0000), Color(0xFFFFFF), Color(0xff00ff00)],
+          spectrum: [Color(0xFFFF0000), Color(0xFFFFFFFF), Color(0xff00ff00)],
           rangeStart: -0.5,
           rangeEnd: 0.5);
       expect(rb[-5.0], Color(0xffff0000));
@@ -36,7 +36,7 @@ main() {
 
     test('Descending Domain', () {
       var rb = Rainbow(
-          spectrum: [Color(0xFF0000), Color(0xFFFFFF), Color(0xff00ff00)],
+          spectrum: [Color(0xFFFF0000), Color(0xFFFFFFFF), Color(0xff00ff00)],
           rangeStart: 0.5,
           rangeEnd: -0.5);
       expect(rb[-5.0], Color(0xff00ff00));
@@ -65,8 +65,25 @@ main() {
         expect(rbu[u], rbd[d]);
       }
     });
+    test('with alpha', () {
+      var rb = Rainbow(spectrum: [
+        Color(0xffff0000),
+        Color(0xFF00ff00),
+        Color(0xffff0000),
+        Color(0xaa113311),
+        Color(0x1100ff00)
+      ], rangeStart: 0.0, rangeEnd: 1.0);
+      expect(rb[-1], Color(0xffff0000));
+      expect(rb[0], Color(0xffff0000));
+      expect(rb[.1], Color(0xff996600));
+      expect(rb[.25], Color(0xff00ff00));
+      expect(rb[.50], Color(0xffff0000));
+      expect(rb[.66667], Color(0xc660220b));
+      expect(rb[.75], Color(0xaa113311));
+      expect(rb[1], Color(0x1100ff00));
+      expect(rb[2], Color(0x1100ff00));
+    });
   });
-//
   group('Getters', () {
     setUp(() {});
     test('Get spectrum', () {
@@ -90,7 +107,7 @@ main() {
     });
   });
   group('Equals', () {
-    var spec = [Color(0xFF0000), Color(0xFFFFFF), Color(0xff00ff00)];
+    var spec = [Color(0xFFFF0000), Color(0xffFFFFFF), Color(0xff00ff00)];
 
     test('Is Equal', () {
       expect(

@@ -2,6 +2,7 @@ library rainbow_color;
 
 import 'dart:ui';
 
+import 'package:flutter/animation.dart';
 import 'package:rainbow_vis/rainbow_vis.dart' as rbDart;
 
 class Rainbow {
@@ -13,7 +14,7 @@ class Rainbow {
   /// @param rangeStart The beginning of the numerical domain to map.
   /// @param rangeEnd The end of the numerical domain to map.
   Rainbow(
-      {List<Color> spectrum = const [Color(0x000000), Color(0xFFFFFF)],
+      {Iterable<Color> spectrum = const [Color(0xFF000000), Color(0xFFFFFFFF)],
       rangeStart = 0.0,
       rangeEnd = 1.0})
       : _rb = rbDart.Rainbow(
@@ -26,8 +27,9 @@ class Rainbow {
   }
 
   /// the gradient definition
-  List<Color> get spectrum =>
-      _rb.spectrum.map((h) => _hexToColor(h.substring(1))).toList();
+  List<Color> get spectrum => _rb.spectrum
+      .map((h) => _hexToColor(h.substring(1)))
+      .toList(growable: false);
 
   /// the range start
   num get rangeStart => _rb.rangeStart;
@@ -45,11 +47,11 @@ class Rainbow {
   }
 
   static String _colorToHex(Color c) {
-    return "#${(c.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}";
+    return "#${(c.value & 0xFFFFFFFF).toRadixString(16).padLeft(8, '0').toUpperCase()}";
   }
 
   static Color _hexToColor(String h) {
-    return Color(int.parse('FF$h', radix: 16));
+    return Color(int.parse(h, radix: 16));
   }
 
   @override
@@ -59,4 +61,23 @@ class Rainbow {
 
   @override
   int get hashCode => _rb.hashCode;
+}
+
+/// An interpolation between two or more colors.
+///
+/// This class specializes the interpolation of [Rainbow] to use
+/// [Color.lerp].
+///
+/// See [Tween] for a discussion on how to use interpolation objects.
+class RainbowColorTween extends Tween<Color> {
+  final Rainbow _rb;
+
+  /// Creates a [Color] tween.
+  RainbowColorTween(List<Color> spectrum)
+      : _rb = Rainbow(spectrum: spectrum, rangeStart: 0.0, rangeEnd: 1.0),
+        super(begin: spectrum.first, end: spectrum.last);
+
+  /// Returns the value this variable has at the given animation clock value.
+  @override
+  Color lerp(double t) => _rb[t];
 }
