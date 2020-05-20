@@ -11,8 +11,8 @@ interpolation.
 This package also provides `RainbowColorTween`, a multi-color variant of the standard ColorTween, eliminating the need
 to build more complex `TweenSequence` for equal-weight transitions.
 
+<img src="https://github.com/ilikerobots/rainbow_color/raw/master/doc/assets/rainbow_color_example.gif" width="384">
 
-_TODO: example image_
 
 ## Usage
 
