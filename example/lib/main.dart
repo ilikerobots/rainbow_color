@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class ColorCycler extends StatefulWidget {
-  const ColorCycler({
+  ColorCycler({
     Key key,
   }) : super(key: key);
 
@@ -62,7 +62,7 @@ class _ColorCyclerState extends State<ColorCycler>
   Animation<double> animation;
   AnimationController controller;
 
-  static List<Color> mainSpectrum = [
+  final Rainbow _rb = Rainbow(spectrum: const [
     Colors.red,
     Colors.orange,
     Colors.yellow,
@@ -71,11 +71,7 @@ class _ColorCyclerState extends State<ColorCycler>
     Colors.indigo,
     Colors.purple,
     Colors.red,
-  ];
-  static List<Color> primaries = mainSpectrum;
-
-  Rainbow rbMain =
-      Rainbow(spectrum: primaries, rangeStart: 0.0, rangeEnd: 300.0);
+  ], rangeStart: 0.0, rangeEnd: 300.0);
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +86,8 @@ class _ColorCyclerState extends State<ColorCycler>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    rbMain[animation.value],
-                    rbMain[(50.0 + animation.value) % rbMain.rangeEnd]
+                    _rb[animation.value],
+                    _rb[(50.0 + animation.value) % _rb.rangeEnd]
                   ]),
               border: Border.all(
                 color: Colors.black,
@@ -105,12 +101,11 @@ class _ColorCyclerState extends State<ColorCycler>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   GreyScaleCycler(
-                      baseColor: rbMain[animation.value],
+                      baseColor: _rb[animation.value],
                       duration: const Duration(seconds: 5),
                       text: "Foo"),
                   GreyScaleCycler(
-                      baseColor:
-                          rbMain[(50.0 + animation.value) % rbMain.rangeEnd],
+                      baseColor: _rb[(50.0 + animation.value) % _rb.rangeEnd],
                       duration: const Duration(seconds: 8),
                       text: "Bar",
                       leftToRight: false),
@@ -136,9 +131,9 @@ class _ColorCyclerState extends State<ColorCycler>
                                   end: Alignment.bottomCenter,
                                   colors: [
                                     Rainbow(spectrum: [
-                                      rbMain[animation.value],
-                                      rbMain[(50.0 + animation.value) %
-                                          rbMain.rangeEnd]
+                                      _rb[animation.value],
+                                      _rb[(50.0 + animation.value) %
+                                          _rb.rangeEnd]
                                     ])[s],
                                     Color(0xffffff)
                                   ]),
@@ -160,7 +155,7 @@ class _ColorCyclerState extends State<ColorCycler>
     controller =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
 
-    animation = Tween<double>(begin: rbMain.rangeStart, end: rbMain.rangeEnd)
+    animation = Tween<double>(begin: _rb.rangeStart, end: _rb.rangeEnd)
         .animate(controller)
           ..addListener(() {
             setState(() {
