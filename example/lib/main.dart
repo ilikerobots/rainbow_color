@@ -77,74 +77,77 @@ class _ColorCyclerState extends State<ColorCycler>
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 250.0,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    _rb[animation.value],
-                    _rb[(50.0 + animation.value) % _rb.rangeEnd]
-                  ]),
-              border: Border.all(
-                color: Colors.black,
-                width: 4,
+      child: AnimatedBuilder(
+        animation: animation,
+        builder: (BuildContext context, _) => Column(
+          children: <Widget>[
+            Container(
+              height: 250.0,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      _rb[animation.value],
+                      _rb[(50.0 + animation.value) % _rb.rangeEnd]
+                    ]),
+                border: Border.all(
+                  color: Colors.black,
+                  width: 4,
+                ),
+                borderRadius: BorderRadius.circular(12),
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  GreyScaleCycler(
-                      baseColor: _rb[animation.value],
-                      duration: const Duration(seconds: 5),
-                      text: "Foo"),
-                  GreyScaleCycler(
-                      baseColor: _rb[(50.0 + animation.value) % _rb.rangeEnd],
-                      duration: const Duration(seconds: 8),
-                      text: "Bar",
-                      leftToRight: false),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-            child: Container(
-              height: 50.0,
-              child: new Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(10, (index) => index / 10)
-                        .map((s) => Container(
-                            height: 45.0,
-                            width: 30.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Rainbow(spectrum: [
-                                      _rb[animation.value],
-                                      _rb[(50.0 + animation.value) %
-                                          _rb.rangeEnd]
-                                    ])[s],
-                                    Color(0xffffff)
-                                  ]),
-                            )))
-                        .toList(),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    GreyScaleCycler(
+                        baseColor: _rb[animation.value],
+                        duration: const Duration(seconds: 5),
+                        text: "Foo"),
+                    GreyScaleCycler(
+                        baseColor: _rb[(50.0 + animation.value) % _rb.rangeEnd],
+                        duration: const Duration(seconds: 8),
+                        text: "Bar",
+                        leftToRight: false),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              child: Container(
+                height: 50.0,
+                child: new Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(10, (index) => index / 10)
+                          .map((s) => Container(
+                              height: 45.0,
+                              width: 30.0,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Rainbow(spectrum: [
+                                        _rb[animation.value],
+                                        _rb[(50.0 + animation.value) %
+                                            _rb.rangeEnd]
+                                      ])[s],
+                                      Color(0xffffff)
+                                    ]),
+                              )))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -157,11 +160,6 @@ class _ColorCyclerState extends State<ColorCycler>
 
     animation = Tween<double>(begin: _rb.rangeStart, end: _rb.rangeEnd)
         .animate(controller)
-          ..addListener(() {
-            setState(() {
-              // The state that has changed here is the animation object’s value.
-            });
-          })
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               controller.reset();
@@ -220,11 +218,6 @@ class _GreyScaleCyclerState extends State<GreyScaleCycler>
     controller = AnimationController(duration: widget.duration, vsync: this);
     _wbAnim = RainbowColorTween(GreyScaleCycler.spectrum).animate(controller);
     _bwAnim = RainbowColorTween(GreyScaleCycler.spectrum).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-      })
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           controller.reset();
