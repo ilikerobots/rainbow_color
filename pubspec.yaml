@@ -1,6 +1,6 @@
 name: rainbow_color
 description: Simplified multi-color interpolation. Map a numerical domain to a smooth-transitioning color range.
-version: 2.0.0
+version: 2.0.1
 homepage: https://github.com/ilikerobots/rainbow_color
 
 environment:
