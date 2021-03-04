@@ -147,10 +147,6 @@ main() {
       expect(() => Rainbow(rangeStart: -1, rangeEnd: -1),
           throwsA(isA<AssertionError>()));
       expect(() => Rainbow(rangeStart: 1), throwsA(isA<AssertionError>()));
-      expect(() => Rainbow(rangeStart: null, rangeEnd: 23.0),
-          throwsA(isA<AssertionError>()));
-      expect(() => Rainbow(rangeStart: -10, rangeEnd: null),
-          throwsA(isA<AssertionError>()));
     });
   });
 }

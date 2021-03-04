@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class ColorCycler extends StatefulWidget {
   ColorCycler({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -59,8 +59,8 @@ class ColorCycler extends StatefulWidget {
 
 class _ColorCyclerState extends State<ColorCycler>
     with SingleTickerProviderStateMixin {
-  Animation<double> animation;
-  AnimationController controller;
+  late Animation<double> animation;
+  late AnimationController controller;
 
   final Rainbow _rb = Rainbow(spectrum: const [
     Colors.red,
@@ -79,6 +79,7 @@ class _ColorCyclerState extends State<ColorCycler>
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
+          ColorText(),
           Container(
             height: 250.0,
             decoration: BoxDecoration(
@@ -155,7 +156,8 @@ class _ColorCyclerState extends State<ColorCycler>
     controller =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
 
-    animation = Tween<double>(begin: _rb.rangeStart, end: _rb.rangeEnd)
+    animation = Tween<double>(
+            begin: _rb.rangeStart.toDouble(), end: _rb.rangeEnd.toDouble())
         .animate(controller)
           ..addListener(() {
             setState(() {
@@ -180,12 +182,54 @@ class _ColorCyclerState extends State<ColorCycler>
   }
 }
 
+class ColorText extends StatefulWidget {
+  const ColorText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _ColorTextState createState() => _ColorTextState();
+}
+
+class _ColorTextState extends State<ColorText>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation<Color> _colorAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: Duration(seconds: 3), vsync: this);
+    _colorAnim =
+        RainbowColorTween([Colors.blue, Colors.green, Colors.red, Colors.blue])
+            .animate(controller)
+              ..addListener(() {
+                setState(() {});
+              })
+              ..addStatusListener((status) {
+                if (status == AnimationStatus.completed) {
+                  controller.reset();
+                  controller.forward();
+                } else if (status == AnimationStatus.dismissed) {
+                  controller.forward();
+                }
+              });
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("Hello!", style: TextStyle(color: _colorAnim.value));
+  }
+}
+
 class GreyScaleCycler extends StatefulWidget {
   const GreyScaleCycler({
-    Key key,
-    @required this.baseColor,
-    @required this.text,
-    @required this.duration,
+    Key? key,
+    required this.baseColor,
+    required this.text,
+    required this.duration,
     this.leftToRight = true,
   }) : super(key: key);
 
@@ -210,9 +254,9 @@ class GreyScaleCycler extends StatefulWidget {
 
 class _GreyScaleCyclerState extends State<GreyScaleCycler>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<Color> _bwAnim;
-  Animation<Color> _wbAnim;
+  late AnimationController controller;
+  late Animation<Color> _bwAnim;
+  late Animation<Color> _wbAnim;
 
   @override
   void initState() {
